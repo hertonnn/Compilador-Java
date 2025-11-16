@@ -2,11 +2,8 @@ double maior (double a, double b)
 {
   int m;
   
-  if (a > b) {
-  m = a;
-  } else {
-  m = b;
-  }
+  if (a > b) {m = a;}
+  else {m = b;}
   return m;
 }
 
@@ -21,7 +18,20 @@ int fat (int n)
     n = n - 1;
   }
   return f;
-} 
+}
+
+int somatorio (int n)
+{
+   int i; 
+   double s;
+   
+   s = 0;
+   for (i = 0 ; i < n; i = i + 1)
+   {
+       s = s + i;
+   }
+   return s;
+}   
    
 
 void imprimir(string s, double r)

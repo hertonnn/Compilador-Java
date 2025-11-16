@@ -12,6 +12,7 @@ data Tokens
   | TIF
   | TELSE
   | TWHILE
+  | TFOR
   | TREAD
   | TRETURN
   | SEMICOLON

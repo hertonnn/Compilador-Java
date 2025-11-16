@@ -8,7 +8,7 @@ import qualified Lexer as L
 }
 
 
-%name calc Program
+%name calc Programa
 %tokentype { Tokens }
 %error { parseError }
 %token
@@ -54,6 +54,7 @@ import qualified Lexer as L
   print   { TPRINT }
 
   while   { TWHILE }
+  for     { TFOR }
   if      { TIF }
   else    { TELSE }
 
@@ -94,7 +95,7 @@ Expr
     | ChamadaF         { $1 }      
     | id                    { IdVar $1 }
 
-Program  : ListaFuncoes BlocoPrincipal {case $2 of
+Programa  : ListaFuncoes BlocoPrincipal {case $2 of
                                          BlocoP v c -> Prog (map (funcaoDeFundef) $1) (map (defDeFundef) $1) v c}
           | BlocoPrincipal {case $1 of
                            BlocoP v c -> Prog [] [] v c}
@@ -135,6 +136,7 @@ ListaCmd  : ListaCmd Comando  {$1 ++ [$2]}
 
 Comando : CmdSe {$1}
         | CmdEnquanto {$1}
+        | CmdDurante  {$1}
         | CmdAtrib    {$1}
         | CmdEscrita  {$1}
         | CmdLeitura  {$1}
@@ -150,8 +152,13 @@ CmdSe : if '(' ExprL ')' Bloco            {If $3 $5 []}
 
 CmdEnquanto : while '(' ExprL ')' Bloco { While $3 $5 }
 
+CmdDurante : for '(' CmdAtribFor ';' ExprL ';' CmdAtribFor ')' Bloco { For $3 $5 $7 $9 }
+
 CmdAtrib  : id '=' Expr ';'     {Atrib $1 $3}
           | id '=' literal ';'  {Atrib $1 (Lit $3)}
+
+CmdAtribFor  : id '=' Expr  {Atrib $1 $3}
+          | id '=' literal      {Atrib $1 (Lit $3)}
 
 CmdEscrita  : print '(' Expr ')' ';'    {Imp $3} 
             | print '(' literal ')' ';' {Imp (Lit $3)}
